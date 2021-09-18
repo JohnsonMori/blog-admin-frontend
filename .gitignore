@@ -1,0 +1,7 @@
+node_modules
+dist
+mock
+yarn.lock
+.DS_Store
+.vscode
+.umi
