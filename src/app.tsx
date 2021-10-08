@@ -1,13 +1,13 @@
 import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
 import { PageLoading } from '@ant-design/pro-layout';
-import type { RunTimeLayoutConfig } from 'umi';
-import { history, Link } from 'umi';
+import { message } from 'antd';
+import { history } from 'umi';
+import { currentUser as queryCurrentUser } from './services/blog/api';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
-import { currentUser as queryCurrentUser } from './services/blog/api';
-import { BookOutlined, LinkOutlined } from '@ant-design/icons';
+import type { RunTimeLayoutConfig } from 'umi';
 
-const isDev = process.env.NODE_ENV === 'development';
+// const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
@@ -29,6 +29,7 @@ export async function getInitialState(): Promise<{
       if (res.code === 10000) {
         return res.data;
       }
+      message.error(res.msg);
       history.push(loginPath);
     } catch (error) {
       history.push(loginPath);
@@ -37,7 +38,8 @@ export async function getInitialState(): Promise<{
   };
   // 如果是登录页面，不执行
   if (history.location.pathname !== loginPath) {
-    const currentUser = await fetchUserInfo('');
+    const id = localStorage.getItem('id') || '';
+    const currentUser = await fetchUserInfo(id);
     return {
       fetchUserInfo,
       currentUser,
@@ -66,18 +68,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
         history.push(loginPath);
       }
     },
-    links: isDev
-      ? [
-          <Link to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>OpenAPI 文档</span>
-          </Link>,
-          <Link to="/~docs">
-            <BookOutlined />
-            <span>业务组件文档</span>
-          </Link>,
-        ]
-      : [],
+    links: [],
     menuHeaderRender: undefined,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,

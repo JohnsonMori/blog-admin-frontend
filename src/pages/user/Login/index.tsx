@@ -7,7 +7,7 @@ import {
 } from '@ant-design/icons';
 import { Alert, Space, message, Tabs } from 'antd';
 import React, { useState } from 'react';
-import ProForm, { ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
+import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
 import { history, useModel } from 'umi';
 import Footer from '@/components/Footer';
 import { login } from '@/services/blog/api';
@@ -50,7 +50,9 @@ const Login: React.FC = () => {
       if (res.code === 10000) {
         const defaultLoginSuccessMessage = '登录成功！';
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo(res?.data?.id || '');
+        const id = res?.data?.id || '';
+        localStorage.setItem('id', id);
+        await fetchUserInfo(id);
         /** 此方法会跳转到 redirect 参数所在的位置 */
 
         if (!history) return;
@@ -74,7 +76,18 @@ const Login: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.main}>
-          <ProForm
+          <LoginForm
+            logo="https://github.githubassets.com/images/modules/logos_page/Octocat.png"
+            title="Blog Admin"
+            subTitle="全球最大同性交友博客"
+            actions={
+              <Space className={styles.other}>
+                其他登录方式 :
+                <AlipayCircleOutlined className={styles.icon} />
+                <TaobaoCircleOutlined className={styles.icon} />
+                <WeiboCircleOutlined className={styles.icon} />
+              </Space>
+            }
             initialValues={{
               autoLogin: true,
             }}
@@ -149,13 +162,7 @@ const Login: React.FC = () => {
                 忘记密码 ?
               </a>
             </div>
-          </ProForm>
-          <Space className={styles.other}>
-            其他登录方式 :
-            <AlipayCircleOutlined className={styles.icon} />
-            <TaobaoCircleOutlined className={styles.icon} />
-            <WeiboCircleOutlined className={styles.icon} />
-          </Space>
+          </LoginForm>
         </div>
       </div>
       <Footer />
