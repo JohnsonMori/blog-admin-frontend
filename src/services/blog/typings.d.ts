@@ -1,4 +1,11 @@
 declare namespace API {
+  type MenuListItem = {
+    id?: string;
+    name?: string;
+    route?: string;
+    weight?: number;
+  };
+
   type CurrentUser = {
     name?: string;
     avatar?: string;

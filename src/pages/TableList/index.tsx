@@ -16,7 +16,7 @@ import { rule, addRule, updateRule, removeRule } from '@/services/ant-design-pro
  * @param fields
  */
 
-const handleAdd = async (fields: API.RuleListItem) => {
+const handleAdd = async (fields: aAPI.RuleListItem) => {
   const hide = message.loading('正在添加');
 
   try {
@@ -62,7 +62,7 @@ const handleUpdate = async (fields: FormValueType) => {
  * @param selectedRows
  */
 
-const handleRemove = async (selectedRows: API.RuleListItem[]) => {
+const handleRemove = async (selectedRows: aAPI.RuleListItem[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
 
@@ -94,14 +94,14 @@ const TableList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<aAPI.RuleListItem>();
+  const [selectedRowsState, setSelectedRows] = useState<aAPI.RuleListItem[]>([]);
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置
    * */
 
-  const columns: ProColumns<API.RuleListItem>[] = [
+  const columns: ProColumns<aAPI.RuleListItem>[] = [
     {
       title: '规则名称',
       dataIndex: 'name',
@@ -195,7 +195,7 @@ const TableList: React.FC = () => {
   ];
   return (
     <PageContainer>
-      <ProTable<API.RuleListItem, API.PageParams>
+      <ProTable<aAPI.RuleListItem, aAPI.PageParams>
         headerTitle={'查询表格'}
         actionRef={actionRef}
         rowKey="key"
@@ -258,7 +258,7 @@ const TableList: React.FC = () => {
         visible={createModalVisible}
         onVisibleChange={handleModalVisible}
         onFinish={async (value) => {
-          const success = await handleAdd(value as API.RuleListItem);
+          const success = await handleAdd(value as aAPI.RuleListItem);
 
           if (success) {
             handleModalVisible(false);
@@ -315,7 +315,7 @@ const TableList: React.FC = () => {
         closable={false}
       >
         {currentRow?.name && (
-          <ProDescriptions<API.RuleListItem>
+          <ProDescriptions<aAPI.RuleListItem>
             column={2}
             title={currentRow?.name}
             request={async () => ({
@@ -324,7 +324,7 @@ const TableList: React.FC = () => {
             params={{
               id: currentRow?.name,
             }}
-            columns={columns as ProDescriptionsItemProps<API.RuleListItem>[]}
+            columns={columns as ProDescriptionsItemProps<aAPI.RuleListItem>[]}
           />
         )}
       </Drawer>

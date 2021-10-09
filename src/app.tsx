@@ -1,11 +1,12 @@
-import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
+import Footer from '@/components/Footer';
+import RightContent from '@/components/RightContent';
 import { PageLoading } from '@ant-design/pro-layout';
 import { message } from 'antd';
 import { history } from 'umi';
 import { currentUser as queryCurrentUser } from './services/blog/api';
-import RightContent from '@/components/RightContent';
-import Footer from '@/components/Footer';
-import type { RunTimeLayoutConfig } from 'umi';
+import type { ResponseInterceptor } from 'umi-request';
+import type { RunTimeLayoutConfig, RequestConfig } from 'umi';
+import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
 
 // const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -74,4 +75,20 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     // unAccessible: <div>unAccessible</div>,
     ...initialState?.settings,
   };
+};
+
+const NewResponseInterceptor: ResponseInterceptor = async (response: Response) => {
+  const data = await response.clone().json();
+  if (data?.code !== 10000) {
+    message.error(data?.msg || '系统异常');
+  }
+  if (response.status === 403) {
+    window.location.href = loginPath;
+  }
+  return response;
+};
+
+// https://umijs.org/zh-CN/plugins/plugin-request
+export const request: RequestConfig = {
+  responseInterceptors: [NewResponseInterceptor],
 };

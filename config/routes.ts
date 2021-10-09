@@ -19,6 +19,7 @@ export default [
       { component: './404' },
     ],
   },
+  { name: '导航管理', icon: 'menu', path: '/navigation', component: './MenuList' },
   { name: '查询表格', icon: 'table', path: '/list', component: './TableList' },
   { path: '/', redirect: '/welcome' },
   { component: './404' },
