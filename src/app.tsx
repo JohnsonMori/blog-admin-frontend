@@ -79,7 +79,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 
 const NewResponseInterceptor: ResponseInterceptor = async (response: Response) => {
   const data = await response.clone().json();
-  if (data?.code !== 10000) {
+  if (!data?.success && data?.code !== 10000) {
     message.error(data?.msg || '系统异常');
   }
   if (response.status === 403) {

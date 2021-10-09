@@ -4,8 +4,8 @@ import { Button, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
 import { ModalForm, ProFormDigit, ProFormText } from '@ant-design/pro-form';
-import { addNav } from '@/services/blog/api';
-import type { ActionType } from '@ant-design/pro-table';
+import { addNav, navigation } from '@/services/blog/api';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
 
 /**
  * @en-US Add node
@@ -31,13 +31,99 @@ const handleAdd = async (fields: API.MenuListItem) => {
   }
 };
 
+const columns: ProColumns<API.MenuListItem>[] = [
+  {
+    title: '导航名称',
+    dataIndex: 'name',
+    tip: 'The navigation name is unique',
+  },
+  // {
+  //   title: '描述',
+  //   dataIndex: 'desc',
+  //   valueType: 'textarea',
+  // },
+  // {
+  //   title: '服务调用次数',
+  //   dataIndex: 'callNo',
+  //   sorter: true,
+  //   hideInForm: true,
+  //   renderText: (val: string) => `${val}${'万'}`,
+  // },
+  // {
+  //   title: '状态',
+  //   dataIndex: 'status',
+  //   hideInForm: true,
+  //   valueEnum: {
+  //     0: {
+  //       text: '关闭',
+  //       status: 'Default',
+  //     },
+  //     1: {
+  //       text: '运行中',
+  //       status: 'Processing',
+  //     },
+  //     2: {
+  //       text: '已上线',
+  //       status: 'Success',
+  //     },
+  //     3: {
+  //       text: '异常',
+  //       status: 'Error',
+  //     },
+  //   },
+  // },
+  // {
+  //   title: '上次调度时间',
+  //   sorter: true,
+  //   dataIndex: 'updatedAt',
+  //   valueType: 'dateTime',
+  //   renderFormItem: (item, { defaultRender, ...rest }, form) => {
+  //     const status = form.getFieldValue('status');
+
+  //     if (`${status}` === '0') {
+  //       return false;
+  //     }
+
+  //     if (`${status}` === '3') {
+  //       return <Input {...rest} placeholder={'请输入异常原因！'} />;
+  //     }
+
+  //     return defaultRender(item);
+  //   },
+  // },
+  // {
+  //   title: '操作',
+  //   dataIndex: 'option',
+  //   valueType: 'option',
+  //   render: (_, record) => [
+  //     <a
+  //       key="config"
+  //       onClick={() => {
+  //         handleUpdateModalVisible(true);
+  //         setCurrentRow(record);
+  //       }}
+  //     >
+  //       配置
+  //     </a>,
+  //     <a key="subscribeAlert" href="https://procomponents.ant.design/">
+  //       订阅警报
+  //     </a>,
+  //   ],
+  // },
+];
+
 const MenuList: React.FC = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
 
   return (
     <PageContainer>
-      <ProTable
+      <ProTable<API.MenuListItem, API.PageParams>
+        actionRef={actionRef}
+        rowKey="id"
+        search={{
+          labelWidth: 120,
+        }}
         toolBarRender={() => [
           <Button
             type="primary"
@@ -49,6 +135,8 @@ const MenuList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
+        request={navigation}
+        columns={columns}
       />
       <ModalForm
         title={'新建导航'}

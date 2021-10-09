@@ -1,4 +1,16 @@
 declare namespace API {
+  type MenuList = {
+    data?: MenuListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  type PageParams = {
+    current?: number;
+    pageSize?: number;
+  };
+
   type MenuListItem = {
     id?: string;
     name?: string;
